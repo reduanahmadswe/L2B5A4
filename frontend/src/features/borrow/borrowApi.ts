@@ -21,14 +21,14 @@ export const borrowApi = createApi({
   endpoints: (builder) => ({
     borrowBook: builder.mutation<void, { book: string; quantity: number; dueDate: string }>({
       query: (body) => ({
-        url: '/borrow',
+        url: '/api/borrow',
         method: 'POST',
         body,
       }),
       invalidatesTags: ['Borrow'],
     }),
     getBorrowSummary: builder.query<BorrowSummaryItem[], void>({
-      query: () => '/borrow',
+      query: () => '/api/borrow',
       transformResponse: (response: BorrowSummaryResponse) => response.data,
       providesTags: ['Borrow'],
     }),

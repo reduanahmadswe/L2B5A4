@@ -9,6 +9,9 @@ export const borrowRoutes = express.Router();
 borrowRoutes.post("/", async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
         const { book, quantity, dueDate } = req.body;
+
+        console.log("📥 Received book ID:", book);
+
         const bookDoc = await Book.findById(book) as BookDocument;
 
         if (!bookDoc || bookDoc.copies < quantity) {
