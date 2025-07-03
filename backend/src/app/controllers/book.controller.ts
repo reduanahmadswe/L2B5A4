@@ -195,3 +195,27 @@ bookRoutes.delete('/:bookId', async (req: Request, res: Response, next: NextFunc
     next(error);
   }
 });
+
+
+
+// GET /api/books/category-count
+bookRoutes.get("/books/category-count", async (req, res) => {
+  try {
+    const counts = await Book.aggregate([
+      {
+        $group: {
+          _id: "$genre",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    res.json({
+      success: true,
+      data: counts,
+    });
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
+    res.status(500).json({ success: false, message: errorMessage });
+  }
+});

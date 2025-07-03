@@ -76,7 +76,7 @@ const Books = () => {
   }
 
   return (
-    <div className="w-full px-4 py-8 sm:px-6 md:px-10 max-w-screen-xl mx-auto">
+      <div className="pt-16 w-full px-4 py-8 sm:px-6 md:px-10 max-w-screen-xl mx-auto">
       <div className="w-full px-2 sm:px-4 py-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <h1 className="text-2xl md:text-3xl font-bold text-sky-900 flex items-center">

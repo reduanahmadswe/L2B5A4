@@ -7,7 +7,8 @@ import Borrow from "../pages/Borrow";
 import BorrowSummary from "../pages/BorrowSummary";
 import BookDetails from "../pages/BookDetails";
 import DeleteBook from './../pages/DeleteBook';
-import Hero from './../components/layout/Hero';
+
+import Home from './../home/Home';
 
 
 const router = createBrowserRouter([
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
     path: "/",
     Component: App,
     children: [
-      { path: "", Component: Hero },
+      { path: "", Component: Home },
       { path: "books", Component: Books },
       { path: "books/:id", Component: BookDetails },
       { path: "create-book", Component: AddBook },
