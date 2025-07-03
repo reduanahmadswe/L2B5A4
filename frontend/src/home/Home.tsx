@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   FiBookOpen,
   FiSearch,
@@ -85,7 +86,7 @@ const Home = () => {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="bg-sky-50 p-6 rounded-xl shadow-sm hover:shadow-lg hover:scale-105 hover:bg-sky-200 transition-all duration-300 ease-in-out border border-transparent hover:border-sky-500"
+                className="bg-sky-50 p-6 rounded-xl shadow-sm hover:shadow-lg  hover:shadow-cyan-800 hover:scale-105 hover:bg-sky-200 transition-all duration-300 ease-in-out border border-transparent hover:border-sky-500"
               >
                 <div className="text-center">
                   {feature.icon}
@@ -132,7 +133,7 @@ const Home = () => {
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="bg-sky-50 p-6 rounded-xl shadow-sm hover:shadow-lg hover:scale-105 hover:bg-sky-200 transition-all duration-300 ease-in-out border border-transparent hover:border-sky-500"
+                className="bg-sky-50 p-6 rounded-xl shadow-sm hover:shadow-lg  hover:shadow-cyan-800 hover:scale-105 hover:bg-sky-200 transition-all duration-300 ease-in-out border border-transparent hover:border-sky-500"
               >
                 <div className="mb-6">{item.icon}</div>
                 <h3 className="text-2xl font-bold text-sky-800 mb-4">
@@ -163,7 +164,7 @@ const Home = () => {
                 {books.map((book) => (
                   <div
                     key={book._id}
-                    className="bg-sky-50 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all hover:scale-105 duration-300 ease-in-out border border-transparent hover:border-sky-500"
+                    className="bg-sky-50  rounded-xl shadow-sm hover:shadow-lg  hover:shadow-cyan-800 hover:scale-105 hover:bg-sky-200 transition-all duration-300 ease-in-out border border-transparent hover:border-sky-500"
                   >
                     <div className="h-48 bg-sky-200 flex items-center justify-center">
                       <FiBookOpen className="text-5xl text-sky-600" />
@@ -205,6 +206,7 @@ const Home = () => {
       </section>
 
       {/* Featured Book Categories Section */}
+      {/* Featured Book Categories Section */}
       <section className="py-16 bg-sky-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -223,29 +225,36 @@ const Home = () => {
               Failed to load categories.
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
+            >
               {knownCategories.map((cat) => {
-                // Normalize _id from backend and compare uppercase for safety
                 const matched = categories?.find(
                   (c) => c._id.toUpperCase() === cat
                 );
                 return (
-                  <Link
+                  <motion.div
                     key={cat}
-                    to={`/category/${cat.toLowerCase()}`}
-                    className="bg-white hover:bg-sky-50 p-4 rounded-lg shadow-sm text-center transition-all duration-300 hover:shadow-md"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="bg-white p-4 rounded-lg shadow-sm text-center transition-all duration-300  hover:shadow-cyan-800 hover:shadow-lg hover:-translate-y-1 border border-transparent hover:bg-sky-200 hover:border-sky-500"
                   >
-                    <div className="text-3xl mb-2">{categoryIcons[cat]}</div>
-                    <h3 className="font-medium text-sky-800">
-                      {cat.replace("_", " ")}
-                    </h3>
-                    <p className="text-sm text-sky-600">
-                      {matched?.count || 0} books
-                    </p>
-                  </Link>
+                    <Link to={`/category/${cat.toLowerCase()}`}>
+                      <div className="text-3xl mb-2">{categoryIcons[cat]}</div>
+                      <h3 className="font-medium text-sky-800">
+                        {cat.replace("_", " ")}
+                      </h3>
+                      <p className="text-sm text-sky-600">
+                        {matched?.count || 0} books
+                      </p>
+                    </Link>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
           )}
         </div>
       </section>

@@ -94,7 +94,7 @@ const Books = () => {
           {books?.map((book) => (
             <div
               key={book._id}
-              className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl border border-sky-100 hover:border-sky-300 transform hover:-translate-y-1 transition-all duration-300 ease-in-out hover:z-10"
+              className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl border hover:shadow-cyan-800 border-sky-100 hover:bg-sky-200 hover:border-sky-500 transform hover:-translate-y-1 transition-all duration-300 ease-in-out hover:z-10"
             >
               <div className="p-4 sm:p-5">
                 <h3 className="text-base sm:text-lg font-semibold text-sky-900 mb-2 line-clamp-2">

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { FaHome, FaBook, FaPlusCircle, FaInfoCircle, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Footer = () => {
