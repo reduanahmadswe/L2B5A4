@@ -51,12 +51,12 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="/add-book" className="flex items-center text-sm text-sky-300 hover:text-white transition-colors duration-300">
+                <a href="/create-book" className="flex items-center text-sm text-sky-300 hover:text-white transition-colors duration-300">
                   <FaPlusCircle className="mr-2 text-sky-400" /> Add Book
                 </a>
               </li>
               <li>
-                <a href="/about" className="flex items-center text-sm text-sky-300 hover:text-white transition-colors duration-300">
+                <a href="/" className="flex items-center text-sm text-sky-300 hover:text-white transition-colors duration-300">
                   <FaInfoCircle className="mr-2 text-sky-400" /> About
                 </a>
               </li>

@@ -3,7 +3,7 @@ import { FiBookOpen } from "react-icons/fi";
 
 const Hero = () => {
   return (
-    <section className="relative bg-sky-50 text-sky-900 py-24 overflow-hidden">
+    <section className="relative bg-sky-50 text-sky-900 py-24 overflow-hidden mt-10">
       {/* Background Image */}
       <div
         className="absolute inset-0 w-full h-full bg-cover bg-center scale-105"
@@ -117,3 +117,4 @@ const Hero = () => {
 };
 
 export default Hero;
+
