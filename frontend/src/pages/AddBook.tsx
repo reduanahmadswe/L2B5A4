@@ -137,7 +137,7 @@ const AddBook = () => {
         />
       ))}
 
-      <div className="max-w-3xl mx-auto relative z-10">
+      <div className="max-w-3xl mx-auto relative z-10 mt-10">
         {/* Animated header inside the box */}
         <motion.div
           className="text-center mb-8"

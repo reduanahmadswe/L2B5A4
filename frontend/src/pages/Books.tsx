@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   useGetBooksQuery,
-  useDeleteBookMutation,
 } from "../features/books/booksApi";
 import { useState } from "react";
 import {
@@ -15,6 +14,7 @@ import {
 } from "react-icons/fi";
 import { FaSpinner } from "react-icons/fa";
 
+
 const limit = 12;
 
 const Books = () => {
@@ -27,7 +27,8 @@ const Books = () => {
     refetch,
   } = useGetBooksQuery({ page, limit });
 
-  const [deleteBook] = useDeleteBookMutation();
+
+  const navigate = useNavigate();
 
   if (isLoading) {
     return (
@@ -60,9 +61,7 @@ const Books = () => {
               />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-sky-900 mb-2">
-            Error Loading Books
-          </h2>
+          <h2 className="text-xl font-bold text-sky-900 mb-2">Error Loading Books</h2>
           <p className="text-sky-800 mb-6">{error?.toString()}</p>
           <button
             onClick={refetch}
@@ -76,7 +75,7 @@ const Books = () => {
   }
 
   return (
-      <div className="pt-16 w-full px-4 py-8 sm:px-6 md:px-10 max-w-screen-xl mx-auto">
+    <div className="pt-16 w-full px-4 py-8 sm:px-6 md:px-10 max-w-screen-xl mx-auto">
       <div className="w-full px-2 sm:px-4 py-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <h1 className="text-2xl md:text-3xl font-bold text-sky-900 flex items-center">
@@ -140,14 +139,7 @@ const Books = () => {
                   <FiEdit2 className="mr-1 sm:mr-1.5" /> Edit
                 </Link>
                 <button
-                  onClick={() => {
-                    const confirmed = window.confirm(
-                      "Are you sure you want to delete this book?"
-                    );
-                    if (confirmed) {
-                      deleteBook(book._id);
-                    }
-                  }}
+                  onClick={() => navigate(`/delete-book/${book._id}`)}
                   className="flex items-center px-2 py-1 sm:px-3 sm:py-1.5 bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition-colors text-xs sm:text-sm hover:shadow-sm"
                   title="Delete"
                 >
