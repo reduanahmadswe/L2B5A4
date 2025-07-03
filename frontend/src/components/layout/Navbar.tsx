@@ -7,8 +7,8 @@ const Navbar = () => {
         <Link to="/">Library System</Link>
       </div>
       <div className="space-x-4">
-        <Link to="/">Books</Link>
-        <Link to="/add-book">Add Book</Link>
+        <Link to="/books">All Books</Link>
+        <Link to="/create-book">Add Book</Link>
         <Link to="/borrow-summary">Borrow Summary</Link>
       </div>
     </nav>

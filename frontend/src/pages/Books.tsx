@@ -52,6 +52,12 @@ const Books = () => {
                 <td className="p-2 border">{book.available ? "Yes" : "No"}</td>
                 <td className="p-2 border space-x-2">
                   <Link
+                    to={`/books/${book._id}`}
+                    className="px-2 py-1 bg-blue-600 text-white rounded"
+                  >
+                    View
+                  </Link>
+                  <Link
                     to={`/edit-book/${book._id}`}
                     className="px-2 py-1 bg-yellow-500 text-white rounded"
                   >
