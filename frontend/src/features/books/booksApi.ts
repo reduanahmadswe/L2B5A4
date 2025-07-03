@@ -1,48 +1,66 @@
+// features/books/booksApi.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-export interface IBook {
-  _id?: string;
+export interface Book {
+  _id: string;
   title: string;
   author: string;
   genre: string;
   isbn: string;
   description: string;
   copies: number;
-  available?: boolean;
+  available: boolean;
+}
+
+interface BooksResponse {
+  success: boolean;
+  data: Book[];
+}
+
+interface BookResponse {
+  success: boolean;
+  data: Book;
 }
 
 export const booksApi = createApi({
   reducerPath: 'booksApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/api' }),
+  baseQuery: fetchBaseQuery({
+    //baseUrl: 'https://library-management-ten-beta.vercel.app/api',
+    baseUrl: 'http://localhost:5000',
+  }),
   tagTypes: ['Books'],
   endpoints: (builder) => ({
-    getBooks: builder.query<IBook[], void>({
-      query: () => '/books',
+    getBooks: builder.query<Book[], void>({
+      query: () => '/api/books',
+      transformResponse: (response: BooksResponse) => response.data,
       providesTags: ['Books'],
     }),
-    getBook: builder.query<IBook, string>({
-      query: (id) => `/books/${id}`,
+    getBook: builder.query<Book, string>({
+      query: (id) => `/api/books/${id}`,
+      transformResponse: (response: BookResponse) => response.data,
       providesTags: ['Books'],
     }),
-    addBook: builder.mutation<IBook, Partial<IBook>>({
-      query: (newBook) => ({
-        url: '/books',
+    addBook: builder.mutation<Book, Partial<Book>>({
+      query: (book) => ({
+        url: '/api//books',
         method: 'POST',
-        body: newBook,
+        body: book,
       }),
+      transformResponse: (response: BookResponse) => response.data,
       invalidatesTags: ['Books'],
     }),
-    updateBook: builder.mutation<IBook, { id: string; book: Partial<IBook> }>({
+    updateBook: builder.mutation<Book, { id: string; book: Partial<Book> }>({
       query: ({ id, book }) => ({
-        url: `/books/${id}`,
+        url: `/api//books/${id}`,
         method: 'PUT',
         body: book,
       }),
+      transformResponse: (response: BookResponse) => response.data,
       invalidatesTags: ['Books'],
     }),
-    deleteBook: builder.mutation<{ success: boolean; id: string }, string>({
+    deleteBook: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/books/${id}`,
+        url: `/api//books/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Books'],

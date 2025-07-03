@@ -1,7 +1,8 @@
-import { Server } from 'http';
-import app from './app';
-import mongoose from 'mongoose';
+import cors from 'cors';
 import dotenv from 'dotenv';
+import { Server } from 'http';
+import mongoose from 'mongoose';
+import app from './app';
 
 dotenv.config();
 

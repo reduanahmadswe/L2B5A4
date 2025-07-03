@@ -8,7 +8,9 @@ export const store = configureStore({
     [borrowApi.reducerPath]: borrowApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(booksApi.middleware, borrowApi.middleware),
+    getDefaultMiddleware()
+      .concat(booksApi.middleware)
+      .concat(borrowApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

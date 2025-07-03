@@ -2,9 +2,11 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import { bookRoutes } from './app/controllers/book.controller';
 import { borrowRoutes } from './app/controllers/borrow.controller';
 import { errorHandler } from './app/utils/errorHandler';
-
+import cors from 'cors';
 
 const app: Application = express();
+
+app.use(cors());
 
 app.use(express.json());
 
