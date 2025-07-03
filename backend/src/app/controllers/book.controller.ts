@@ -197,9 +197,7 @@ bookRoutes.delete('/:bookId', async (req: Request, res: Response, next: NextFunc
 });
 
 
-
-// GET /api/books/category-count
-bookRoutes.get("/books/category-count", async (req, res) => {
+bookRoutes.get("/category-count", async (req, res, next) => {
   try {
     const counts = await Book.aggregate([
       {
@@ -209,13 +207,9 @@ bookRoutes.get("/books/category-count", async (req, res) => {
         },
       },
     ]);
-
-    res.json({
-      success: true,
-      data: counts,
-    });
+    res.json({ success: true, data: counts });
   } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
-    res.status(500).json({ success: false, message: errorMessage });
+    console.error("Error in /category-count:", err);  // Log the error on the server
+    next(err);  // Or send a custom error response
   }
 });

@@ -12,6 +12,24 @@ import { useGetBooksQuery } from "../features/books/booksApi";
 import { FaSpinner } from "react-icons/fa";
 import Hero from "./../components/layout/Hero";
 
+import { useGetCategoryCountsQuery } from "../features/books/booksApi";
+
+const knownCategories = [
+  "FICTION",
+  "NON_FICTION",
+  "SCIENCE",
+  "HISTORY",
+  "BIOGRAPHY",
+  "FANTASY",
+];
+const categoryIcons: Record<string, React.ReactNode> = {
+  FICTION: "📖",
+  NON_FICTION: "📚",
+  SCIENCE: "🔬",
+  HISTORY: "🏺",
+  BIOGRAPHY: "👤",
+  FANTASY: "🐉",
+};
 const Home = () => {
   // Move the hook call here
   const {
@@ -19,6 +37,12 @@ const Home = () => {
     isLoading,
     isError,
   } = useGetBooksQuery({ page: 1, limit: 5 });
+
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+  } = useGetCategoryCountsQuery();
 
   return (
     <div className="bg-sky-50">
@@ -177,11 +201,10 @@ const Home = () => {
               </div>
             </>
           )}
-               
         </div>
       </section>
 
-      {/* Book Categories Section */}
+      {/* Featured Book Categories Section */}
       <section className="py-16 bg-sky-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -191,26 +214,39 @@ const Home = () => {
             <div className="h-1 w-20 mx-auto bg-gradient-to-r from-sky-300 to-blue-600 rounded-full"></div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {[
-              { name: "Science Fiction", count: 128 },
-              { name: "Biography", count: 92 },
-              { name: "Technology", count: 76 },
-              { name: "History", count: 114 },
-              { name: "Fantasy", count: 85 },
-              { name: "Mystery", count: 67 },
-            ].map((category, index) => (
-              <Link
-                key={index}
-                to={`/category/${category.name.toLowerCase()}`}
-                className="bg-white hover:bg-sky-50 p-4 rounded-lg shadow-sm text-center transition-colors"
-              >
-                <div className="text-3xl mb-2">📚</div>
-                <h3 className="font-medium text-sky-800">{category.name}</h3>
-                <p className="text-sm text-sky-600">{category.count} books</p>
-              </Link>
-            ))}
-          </div>
+          {categoriesLoading ? (
+            <div className="text-center text-sky-600">
+              Loading categories...
+            </div>
+          ) : categoriesError ? (
+            <div className="text-center text-red-500">
+              Failed to load categories.
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {knownCategories.map((cat) => {
+                // Normalize _id from backend and compare uppercase for safety
+                const matched = categories?.find(
+                  (c) => c._id.toUpperCase() === cat
+                );
+                return (
+                  <Link
+                    key={cat}
+                    to={`/category/${cat.toLowerCase()}`}
+                    className="bg-white hover:bg-sky-50 p-4 rounded-lg shadow-sm text-center transition-all duration-300 hover:shadow-md"
+                  >
+                    <div className="text-3xl mb-2">{categoryIcons[cat]}</div>
+                    <h3 className="font-medium text-sky-800">
+                      {cat.replace("_", " ")}
+                    </h3>
+                    <p className="text-sm text-sky-600">
+                      {matched?.count || 0} books
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
     </div>

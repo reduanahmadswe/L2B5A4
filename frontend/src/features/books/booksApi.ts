@@ -24,6 +24,17 @@ interface BookResponse {
   data: Book;
 }
 
+interface GenreCount {
+  _id: string; // genre
+  count: number;
+}
+
+interface GenreCountResponse {
+  success: boolean;
+  data: GenreCount[];
+}
+
+
 export const booksApi = createApi({
   reducerPath: 'booksApi',
   baseQuery: fetchBaseQuery({
@@ -38,9 +49,9 @@ export const booksApi = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.map((book) => ({ type: 'Books' as const, id: book._id })),
-              { type: 'Books' },
-            ]
+            ...result.map((book) => ({ type: 'Books' as const, id: book._id })),
+            { type: 'Books' },
+          ]
           : [{ type: 'Books' }],
     }),
 
@@ -77,6 +88,13 @@ export const booksApi = createApi({
       }),
       invalidatesTags: ['Books'],
     }),
+
+
+    getCategoryCounts: builder.query<GenreCount[], void>({
+      query: () => `/api/books/category-count`, // ✅ Your backend route
+      transformResponse: (response: GenreCountResponse) => response.data,
+    }),
+
   }),
 });
 
@@ -86,4 +104,8 @@ export const {
   useAddBookMutation,
   useUpdateBookMutation,
   useDeleteBookMutation,
+  useGetCategoryCountsQuery,
 } = booksApi;
+
+
+
