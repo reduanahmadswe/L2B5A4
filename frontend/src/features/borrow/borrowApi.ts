@@ -13,7 +13,7 @@ interface BorrowSummaryResponse {
 
 export const borrowApi = createApi({
   reducerPath: 'borrowApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://library-management-ten-beta.vercel.app', }),
   tagTypes: ['Borrow', 'Books'],
   endpoints: (builder) => ({
     borrowBook: builder.mutation<

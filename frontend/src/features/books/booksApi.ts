@@ -27,7 +27,7 @@ interface BookResponse {
 export const booksApi = createApi({
   reducerPath: 'booksApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:5000',
+    baseUrl: 'https://library-management-ten-beta.vercel.app',
   }),
   tagTypes: ['Books'],
   endpoints: (builder) => ({
@@ -47,7 +47,7 @@ export const booksApi = createApi({
     getBook: builder.query<Book, string>({
       query: (id) => `/api/books/${id}`,
       transformResponse: (response: BookResponse) => response.data,
-      providesTags: (result, error, id) => [{ type: 'Books', id }],
+      providesTags: (_result, _error, id) => [{ type: 'Books', id }],
     }),
 
     addBook: builder.mutation<Book, Partial<Book>>({

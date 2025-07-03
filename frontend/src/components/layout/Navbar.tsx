@@ -2,27 +2,36 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav className="bg-blue-600 p-4 text-white flex justify-between">
-      <div className="text-lg font-bold">
-        <Link to="/">Library System</Link>
-      </div>
-      <div className="space-x-4">
-        <Link to="/books">All Books</Link>
-        <Link to="/create-book">Add Book</Link>
-        <Link to="/borrow-summary">Borrow Summary</Link>
+    <nav className="bg-sky-950 p-4 text-white shadow-md">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
+        <div className="text-xl font-bold mb-4 md:mb-0">
+          <Link to="/" className="hover:text-indigo-200 transition-colors">
+            LibroVault
+          </Link>
+        </div>
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+          <Link 
+            to="/books" 
+            className="px-3 py-1 rounded hover:bg-indigo-600 transition-colors"
+          >
+            All Books
+          </Link>
+          <Link 
+            to="/create-book" 
+            className="px-3 py-1 rounded hover:bg-indigo-600 transition-colors"
+          >
+            Add Book
+          </Link>
+          <Link 
+            to="/borrow-summary" 
+            className="px-3 py-1 rounded hover:bg-indigo-600 transition-colors"
+          >
+            Borrow Summary
+          </Link>
+        </div>
       </div>
     </nav>
   );
 };
 
 export default Navbar;
-
-
-
-
-// UI/UX
-// Minimalist UI: clean and featureful UI using Tailwind CSS or plain CSS.
-// User Experience: Easy navigation between pages, clearly labeled buttons, and simple forms.
-// Responsive: The layout must be fully responsive and adapt seamlessly to mobile, tablet, and desktop devices.
-// Frontend	React + TypeScript
-// Styling	Tailwind CSS or any basic CSS framework

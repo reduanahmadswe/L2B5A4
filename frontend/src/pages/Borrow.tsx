@@ -60,49 +60,54 @@ const Borrow = () => {
   if (isError || !book)
     return <p className="p-4 text-red-600">Error loading book</p>;
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Borrow Book</h1>
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
-        <div>
-          <p className="text-lg font-semibold">{book.title}</p>
+   return (
+    <div className="container mx-auto p-4 max-w-md">
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">Borrow Book</h1>
+      
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-gray-900">{book.title}</h2>
           <p className="text-gray-600">By {book.author}</p>
-          <p className="text-sm mt-1 text-gray-500">
-            Available Copies: {book.copies}
+          <p className="text-sm text-gray-500 mt-2">
+            Available Copies: <span className="font-medium">{book.copies}</span>
           </p>
         </div>
 
-        <div>
-          <label className="block mb-1">Quantity</label>
-          <input
-            type="number"
-            min="1"
-            max={book.copies}
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-            className="w-full border p-2 rounded"
-            required
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+            <input
+              type="number"
+              min="1"
+              max={book.copies}
+              value={quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+              required
+            />
+          </div>
 
-        <div>
-          <label className="block mb-1">Due Date</label>
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            className="w-full border p-2 rounded"
-            required
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+              required
+            />
+          </div>
 
-        <button
-          type="submit"
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-        >
-          Borrow
-        </button>
-      </form>
+          <div className="pt-4">
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            >
+              Borrow Book
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
