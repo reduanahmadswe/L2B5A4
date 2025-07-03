@@ -83,7 +83,7 @@ const Books = () => {
             <FiBook className="mr-2" /> Library Catalog
           </h1>
           <Link
-            to="/add-book"
+            to="/create-book"
             className="flex items-center px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-transform w-full sm:w-auto justify-center"
           >
             <FiPlus className="mr-2" /> Add New Book
