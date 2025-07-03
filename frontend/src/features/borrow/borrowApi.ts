@@ -19,7 +19,7 @@ export const borrowApi = createApi({
   }),
   tagTypes: ['Borrow'],
   endpoints: (builder) => ({
-    borrowBook: builder.mutation<void, { bookId: string; quantity: number; dueDate: string }>({
+    borrowBook: builder.mutation<void, { book: string; quantity: number; dueDate: string }>({
       query: (body) => ({
         url: '/borrow',
         method: 'POST',

@@ -1,6 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAddBookMutation } from "../features/books/booksApi";
+import { toast } from "react-toastify";
+
+const genreOptions = [
+  "FICTION",
+  "NON_FICTION",
+  "SCIENCE",
+  "HISTORY",
+  "BIOGRAPHY",
+  "FANTASY",
+];
 
 const AddBook = () => {
   const navigate = useNavigate();
@@ -15,15 +25,38 @@ const AddBook = () => {
     copies: 1,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: name === "copies" ? Number(value) : value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await addBook({ ...form, copies: Number(form.copies) });
-    navigate("/");
+    try {
+      await addBook({ ...form }).unwrap();
+      toast.success("Book added successfully!");
+      navigate("/");
+    } catch (error: unknown) {
+      interface ErrorWithMessage {
+        data: {
+          message: string;
+        };
+      }
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "data" in error &&
+        typeof (error as ErrorWithMessage).data === "object" &&
+        (error as ErrorWithMessage).data !== null &&
+        "message" in (error as ErrorWithMessage).data
+      ) {
+        toast.error((error as ErrorWithMessage).data.message);
+      } else {
+        toast.error("Failed to add book");
+      }
+    }
   };
 
   return (
@@ -46,14 +79,20 @@ const AddBook = () => {
           className="w-full border p-2 rounded"
           required
         />
-        <input
+        <select
           name="genre"
           value={form.genre}
           onChange={handleChange}
-          placeholder="Genre"
           className="w-full border p-2 rounded"
           required
-        />
+        >
+          <option value="">-- Select Genre --</option>
+          {genreOptions.map((genre) => (
+            <option key={genre} value={genre}>
+              {genre.replace("_", " ").toLowerCase().replace(/^\w/, c => c.toUpperCase())}
+            </option>
+          ))}
+        </select>
         <input
           name="isbn"
           value={form.isbn}
@@ -80,7 +119,7 @@ const AddBook = () => {
           min="1"
           required
         />
-        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
+        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
           Add Book
         </button>
       </form>

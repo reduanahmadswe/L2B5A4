@@ -1,14 +1,27 @@
 // pages/Books.tsx
 import { Link } from "react-router-dom";
-import { useGetBooksQuery, useDeleteBookMutation } from "../features/books/booksApi";
+import {
+  useGetBooksQuery,
+  useDeleteBookMutation,
+} from "../features/books/booksApi";
+import { useState } from "react";
+
+const limit = 10;
 
 const Books = () => {
-  const { data: books, isLoading, isError, error } = useGetBooksQuery();
+  const [page, setPage] = useState(1);
+  const {
+    data: books,
+    isLoading,
+    isError,
+    error,
+  } = useGetBooksQuery({ page, limit });
+
   const [deleteBook] = useDeleteBookMutation();
 
   if (isLoading) return <p className="p-4">Loading books...</p>;
   if (isError) {
-    console.error('Error loading books:', error);
+    console.error("Error loading books:", error);
     return <p className="p-4 text-red-600">Error loading books</p>;
   }
 
@@ -45,7 +58,12 @@ const Books = () => {
                     Edit
                   </Link>
                   <button
-                    onClick={() => deleteBook(book._id)}
+                    onClick={() => {
+                      const confirmed = window.confirm("Are you sure you want to delete this book?");
+                      if (confirmed) {
+                        deleteBook(book._id);
+                      }
+                    }}
                     className="px-2 py-1 bg-red-600 text-white rounded"
                   >
                     Delete
@@ -61,6 +79,24 @@ const Books = () => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center mt-4 space-x-4">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+        >
+          Previous
+        </button>
+        <span className="px-4 py-2">{page}</span>
+        <button
+          onClick={() => setPage((prev) => prev + 1)}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
