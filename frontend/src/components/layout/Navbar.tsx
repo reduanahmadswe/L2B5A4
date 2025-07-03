@@ -16,3 +16,13 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
+
+// UI/UX
+// Minimalist UI: clean and featureful UI using Tailwind CSS or plain CSS.
+// User Experience: Easy navigation between pages, clearly labeled buttons, and simple forms.
+// Responsive: The layout must be fully responsive and adapt seamlessly to mobile, tablet, and desktop devices.
+// Frontend	React + TypeScript
+// Styling	Tailwind CSS or any basic CSS framework

@@ -37,7 +37,7 @@ const Books = () => {
               <th className="p-2 border">Genre</th>
               <th className="p-2 border">ISBN</th>
               <th className="p-2 border">Copies</th>
-              <th className="p-2 border">Available</th>
+              <th className="p-2 border">Status</th>
               <th className="p-2 border">Actions</th>
             </tr>
           </thead>
@@ -49,7 +49,7 @@ const Books = () => {
                 <td className="p-2 border">{book.genre}</td>
                 <td className="p-2 border">{book.isbn}</td>
                 <td className="p-2 border">{book.copies}</td>
-                <td className="p-2 border">{book.available ? "Yes" : "No"}</td>
+                <td className="p-2 border">{book.available ? "Available now" : "Unavilable"}</td>
                 <td className="p-2 border space-x-2">
                   <Link
                     to={`/books/${book._id}`}
