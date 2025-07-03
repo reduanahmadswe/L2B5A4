@@ -42,18 +42,39 @@ export const booksApi = createApi({
   }),
   tagTypes: ['Books'],
   endpoints: (builder) => ({
-    getBooks: builder.query<Book[], { page?: number; limit?: number }>({
-      query: ({ page = 1, limit = 10 } = {}) =>
-        `/api/books?page=${page}&limit=${limit}`,
-      transformResponse: (response: BooksResponse) => response.data,
-      providesTags: (result) =>
-        result
-          ? [
-            ...result.map((book) => ({ type: 'Books' as const, id: book._id })),
-            { type: 'Books' },
-          ]
-          : [{ type: 'Books' }],
-    }),
+    // getBooks: builder.query<Book[], { page?: number; limit?: number }>({
+    //   query: ({ page = 1, limit = 10 } = {}) =>
+    //     `/api/books?page=${page}&limit=${limit}`,
+    //   transformResponse: (response: BooksResponse) => response.data,
+    //   providesTags: (result) =>
+    //     result
+    //       ? [
+    //         ...result.map((book) => ({ type: 'Books' as const, id: book._id })),
+    //         { type: 'Books' },
+    //       ]
+    //       : [{ type: 'Books' }],
+    // }),
+
+    getBooks: builder.query<Book[], { page?: number; limit?: number; filter?: string }>(
+      {
+        query: ({ page = 1, limit = 10, filter } = {}) => {
+          let queryString = `/api/books?page=${page}&limit=${limit}`;
+          if (filter) {
+            queryString += `&filter=${encodeURIComponent(filter)}`;
+          }
+          return queryString;
+        },
+        transformResponse: (response: BooksResponse) => response.data,
+        providesTags: (result) =>
+          result
+            ? [
+              ...result.map((book) => ({ type: 'Books' as const, id: book._id })),
+              { type: 'Books' },
+            ]
+            : [{ type: 'Books' }],
+      }
+    ),
+
 
     getBook: builder.query<Book, string>({
       query: (id) => `/api/books/${id}`,
@@ -91,9 +112,10 @@ export const booksApi = createApi({
 
 
     getCategoryCounts: builder.query<GenreCount[], void>({
-      query: () => `/api/books/category-count`, // ✅ Your backend route
+      query: () => `/api/books/category-count`,
       transformResponse: (response: GenreCountResponse) => response.data,
     }),
+
 
   }),
 });

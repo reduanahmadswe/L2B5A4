@@ -9,6 +9,7 @@ import BookDetails from "../pages/BookDetails";
 import DeleteBook from './../pages/DeleteBook';
 
 import Home from './../home/Home';
+import CategoryBooks from './../pages/CategoryBooks';
 
 
 const router = createBrowserRouter([
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
       { path: "/delete-book/:id", Component: DeleteBook },
       { path: "borrow/:bookId", Component: Borrow },
       { path: "borrow-summary", Component: BorrowSummary },
+      { path: "category/:genre", Component: CategoryBooks },
     ],
   },
 ]);

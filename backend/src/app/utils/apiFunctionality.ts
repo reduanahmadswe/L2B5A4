@@ -6,16 +6,14 @@ class APIFunctionality {
     this.query = query;
     this.queryStr = queryStr;
   }
-  
 
   filter() {
     const queryCopy = { ...this.queryStr };
 
-
     const removeFields = ["keyword", "page", "limit", "sort", "sortBy"];
     removeFields.forEach((key) => delete queryCopy[key]);
 
-
+    // If "filter" is provided (e.g., search keyword for genre)
     if (queryCopy.filter) {
       queryCopy.genre = {
         $regex: queryCopy.filter,
@@ -23,11 +21,10 @@ class APIFunctionality {
       };
       delete queryCopy.filter;
     }
-
+    
     this.query = this.query.find(queryCopy);
     return this;
   }
-
 
   pagination(resultPerPage: number) {
     const currentPage = Number(this.queryStr.page) || 1;

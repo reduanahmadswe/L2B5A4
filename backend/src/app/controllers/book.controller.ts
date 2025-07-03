@@ -85,6 +85,7 @@ bookRoutes.post('/', async (req: Request, res: Response, next: NextFunction): Pr
 
 //Get All Books
 bookRoutes.get('/', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  
   try {
     const limit = Number(req.query.limit) || 10;
     const sortBy = req.query.sortBy || "createdAt";
@@ -134,6 +135,46 @@ bookRoutes.get('/', async (req: Request, res: Response, next: NextFunction): Pro
     next(error);
   }
 });
+
+
+// 1. Specific routes first
+bookRoutes.get("/category-count", async (req, res, next) => {
+  try {
+    const counts = await Book.aggregate([
+      {
+        $group: {
+          _id: "$genre",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    res.json({
+      success: true,
+      data: counts,
+    });
+  } catch (err) {
+    console.error("Aggregation error:", err);
+    next(err);
+  }
+});
+
+//Specific routes first
+bookRoutes.get('/category-count', async (req, res) => {
+  try {
+    const counts = await Book.aggregate([
+      { $group: { _id: "$genre", count: { $sum: 1 } } }
+    ]);
+    res.json({ success: true, data: counts });
+  } catch (err) {
+    console.error("Aggregation error:", err);
+    res.status(500).json({
+      success: false,
+      message: err instanceof Error ? err.message : "Unknown error"
+    });
+  }
+});
+
+
 
 //Get Book by ID
 bookRoutes.get('/:bookId', async (req: Request, res: Response, next: NextFunction) => {
@@ -197,19 +238,3 @@ bookRoutes.delete('/:bookId', async (req: Request, res: Response, next: NextFunc
 });
 
 
-bookRoutes.get("/category-count", async (req, res, next) => {
-  try {
-    const counts = await Book.aggregate([
-      {
-        $group: {
-          _id: "$genre",
-          count: { $sum: 1 },
-        },
-      },
-    ]);
-    res.json({ success: true, data: counts });
-  } catch (err) {
-    console.error("Error in /category-count:", err);  // Log the error on the server
-    next(err);  // Or send a custom error response
-  }
-});
