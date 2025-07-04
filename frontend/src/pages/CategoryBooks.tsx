@@ -12,7 +12,7 @@ const CategoryBooks = () => {
   } = useGetBooksQuery({ page: 1, limit: 20, filter: genre });
 
   return (
-    <div className="container mx-auto py-10 px-4">
+    <div className="container mx-auto py-10 px-4 mt-16">
       <h2 className="text-3xl font-bold text-sky-800 mb-6 capitalize">
         📚 {genre?.replace("_", " ")} Books
       </h2>
