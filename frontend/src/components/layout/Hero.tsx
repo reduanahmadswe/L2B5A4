@@ -10,6 +10,7 @@ const Hero = () => {
         style={{
           backgroundImage:
             "url('https://www.samdu.uz/upload/cover-images/63b451b1cbc7f-63b451b1cbc82-63b451b1cbc83-63b451b1cbc84.jpg')",
+            
         }}
       ></div>
 

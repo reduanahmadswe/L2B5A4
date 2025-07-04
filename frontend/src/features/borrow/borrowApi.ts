@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { booksApi } from '../books/booksApi'; // ✅ Import booksApi to access its cache
+import { booksApi } from '../books/booksApi'; // ✅ Import booksApi to update cache
 
 interface BorrowSummaryItem {
   book: { title: string; isbn: string };
@@ -13,9 +13,12 @@ interface BorrowSummaryResponse {
 
 export const borrowApi = createApi({
   reducerPath: 'borrowApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://library-management-ten-beta.vercel.app', }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'https://library-management-ten-beta.vercel.app',
+  }),
   tagTypes: ['Borrow', 'Books'],
   endpoints: (builder) => ({
+    // ✅ Borrow Book Mutation
     borrowBook: builder.mutation<
       void,
       { book: string; quantity: number; dueDate: string }
@@ -25,35 +28,50 @@ export const borrowApi = createApi({
         method: 'POST',
         body,
       }),
-      // Update book caches after successful borrow
-      async onQueryStarted({ book, quantity }, { dispatch, queryFulfilled }) {
+
+      async onQueryStarted({ book, quantity }, { dispatch, queryFulfilled, getState }) {
+        // Optimistically update single book detail
+        const patchBook = dispatch(
+          booksApi.util.updateQueryData('getBook', book, (draft) => {
+            draft.copies -= quantity;
+            draft.available = draft.copies > 0;
+          })
+        );
+
+        
+        const booksApiState = ((getState() as unknown) as { booksApi?: { queries?: Record<string, unknown> } }).booksApi;
+        const queries = Object.entries(booksApiState?.queries ?? {});
+        const patchBooks: Array<{ undo: () => void }> = [];
+
+        for (const [key] of queries) {
+          if (key.startsWith("getBooks")) {
+            const match = key.match(/getBooks\((.*)\)/);
+            const args = match?.[1] ? JSON.parse(match[1]) : {};
+
+            const patch = dispatch(
+              booksApi.util.updateQueryData('getBooks', args, (books) => {
+                const bookToUpdate = books.find((b) => b._id === book);
+                if (bookToUpdate) {
+                  bookToUpdate.copies -= quantity;
+                  bookToUpdate.available = bookToUpdate.copies > 0;
+                }
+              })
+            );
+
+            patchBooks.push(patch);
+          }
+        }
+
         try {
           await queryFulfilled;
-
-          
-          dispatch(
-            booksApi.util.updateQueryData('getBook', book, (draft) => {
-              draft.copies -= quantity;
-              draft.available = draft.copies > 0;
-            })
-          );
-
-          
-          dispatch(
-            booksApi.util.updateQueryData('getBooks', { page: 1, limit: 10 }, (books) => {
-              const bookToUpdate = books.find((b) => b._id === book);
-              if (bookToUpdate) {
-                bookToUpdate.copies -= quantity;
-                bookToUpdate.available = bookToUpdate.copies > 0;
-              }
-            })
-          );
-        } catch (error) {
-          console.error('Failed to update cache after borrowing:', error);
+        } catch {
+          patchBook.undo();
+          patchBooks.forEach((patch) => patch.undo());
         }
       },
     }),
 
+    // ✅ Get Borrow Summary Query
     getBorrowSummary: builder.query<BorrowSummaryItem[], void>({
       query: () => '/api/borrow',
       transformResponse: (response: BorrowSummaryResponse) => response.data,
@@ -62,4 +80,7 @@ export const borrowApi = createApi({
   }),
 });
 
-export const { useBorrowBookMutation, useGetBorrowSummaryQuery } = borrowApi;
+export const {
+  useBorrowBookMutation,
+  useGetBorrowSummaryQuery,
+} = borrowApi;
