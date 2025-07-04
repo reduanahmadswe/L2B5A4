@@ -28,7 +28,7 @@ class APIFunctionality {
 
   pagination(resultPerPage: number) {
     const currentPage = Number(this.queryStr.page) || 1;
-    const skip = resultPerPage * (currentPage - 1);
+    const skip =  (currentPage - 1)*resultPerPage;
     this.query = this.query.limit(resultPerPage).skip(skip);
     return this;
   }

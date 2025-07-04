@@ -128,6 +128,3 @@ export const {
   useDeleteBookMutation,
   useGetCategoryCountsQuery,
 } = booksApi;
-
-
-
