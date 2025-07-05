@@ -14,6 +14,7 @@ import { FaSpinner } from "react-icons/fa";
 import Hero from "./../components/layout/Hero";
 
 import { useGetCategoryCountsQuery } from "../features/books/booksApi";
+import Books from "@/pages/Books";
 
 const knownCategories = [
   "FICTION",
@@ -53,8 +54,9 @@ const Home = () => {
       <Hero />
 
       {/* What You Can Do Section */}
+      <Books />
 
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-sky-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-sky-900 mb-4">
@@ -106,7 +108,7 @@ const Home = () => {
       </section>
 
       {/* Why LibroVault Section (Static Grid) */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-sky-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-sky-900 mb-4">
@@ -149,7 +151,7 @@ const Home = () => {
       </section>
 
       {/* Featured Books Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-sky-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Data fetching */}
           {isLoading ? (

@@ -56,7 +56,7 @@ const AddBook = () => {
     try {
       await addBook({ ...form, copies: Number(form.copies) || 0 }).unwrap();
       toast.success("Book added successfully!");
-      navigate("/");
+      navigate("/books");
     } catch (error: unknown) {
       interface ErrorWithMessage {
         data: {
@@ -306,7 +306,6 @@ const AddBook = () => {
                     value={form.copies}
                     onChange={handleChange}
                     className="block w-full rounded-md border-sky-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm p-2 border bg-sky-50 hover:bg-sky-100/50 transition-all"
-                    required
                     whileFocus={{
                       scale: 1.01,
                       boxShadow: "0 0 0 2px rgba(14, 165, 233, 0.5)",
