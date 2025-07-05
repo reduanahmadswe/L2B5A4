@@ -213,36 +213,7 @@ Backend API: [https://library-management-ten-beta.vercel.app/](https://library-m
 | `/borrow/:bookId`     | Form to borrow a selected book                                |
 | `/borrow-summary`     | Aggregated summary of all borrowed books                      |
 
-
-
 ---
-## 📸 Screenshots
-
-### 🏠 Home Page
-Featured books and categories  
-![Home Page](./screenshots/home.png)
-
-### 📚 Books Library
-Paginated list of all books  
-![Books Catalog](./screenshots/books-catalog.png)
-
-### 📖 Book Details
-Complete book information  
-![Book Details](./screenshots/book-details.png)
-
-### ✏️ Add/Edit Book
-Form for managing book data  
-![Add/Edit Book](./screenshots/add-edit-book.png)
-
-### 📦 Borrow Interface
-Checkout system for books  
-![Borrow Interface](./screenshots/borrow.png)
-
-### 📊 Borrow Summary
-Overview of borrowed books  
-![Borrow Summary](./screenshots/borrow-summary.png)
-
-
 
 ## 🙌 Author
 

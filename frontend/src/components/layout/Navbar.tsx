@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiBook, FiPlusCircle, FiList, FiHome, FiMenu, FiX } from "react-icons/fi";
 import { useState } from "react";
+import { ModeToggle } from "../mode-toggle";
 
 const Navbar = () => {
   const location = useLocation();
@@ -11,7 +12,7 @@ const Navbar = () => {
     { path: "/", name: "Home", icon: <FiHome className="mr-1" /> },
     { path: "/books", name: "All Books", icon: <FiBook className="mr-1" /> },
     { path: "/create-book", name: "Add Book", icon: <FiPlusCircle className="mr-1" /> },
-    { path: "/borrow-summary", name: "Borrow Summary", icon: <FiList className="mr-1" /> },
+    { path: "/borrow-summary", name: "Borrow Summary", icon: <FiList className="mr-1" /> }
   ];
 
   const toggleMobileMenu = () => {
@@ -85,6 +86,10 @@ const Navbar = () => {
           >
             {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
+          
+        {/* <ModeToggle>
+          
+          </ModeToggle> */}
         </div>
 
         {/* Mobile Navigation */}
@@ -124,6 +129,7 @@ const Navbar = () => {
             </motion.div>
           )}
         </AnimatePresence>
+
       </div>
     </motion.nav>
   );
