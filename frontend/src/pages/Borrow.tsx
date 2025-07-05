@@ -4,6 +4,8 @@ import { useBorrowBookMutation } from "../features/borrow/borrowApi";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { useAppDispatch } from "../redux/hooks";
+import { borrowApi } from "../features/borrow/borrowApi";
 import {
   FiBook,
   FiCalendar,
@@ -22,6 +24,7 @@ const Borrow = () => {
   const [dueDate, setDueDate] = useState("");
   const [minDate, setMinDate] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const today = new Date();
@@ -54,6 +57,29 @@ const Borrow = () => {
         quantity: Number(quantity),
         dueDate,
       }).unwrap();
+
+      dispatch(
+        borrowApi.util.updateQueryData(
+          "getBorrowSummary",
+          undefined,
+          (draft) => {
+            const existing = draft.find((entry) => entry.book._id === bookId);
+            if (existing) {
+              existing.totalQuantity += Number(quantity);
+            } else {
+              draft.push({
+                book: {
+                  _id: book._id,
+                  title: book.title,
+                  isbn: book.isbn,
+                },
+                totalQuantity: Number(quantity),
+              });
+            }
+          }
+        )
+      );
+
 
       toast.success(
         <div className="flex items-center">

@@ -2,9 +2,14 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { booksApi } from '../books/booksApi'; 
 
 interface BorrowSummaryItem {
-  book: { title: string; isbn: string };
+  book: {
+    _id: string;
+    title: string;
+    isbn: string;
+  };
   totalQuantity: number;
 }
+
 
 interface BorrowSummaryResponse {
   success: boolean;
@@ -28,6 +33,7 @@ export const borrowApi = createApi({
     method: 'POST',
     body,
   }),
+   invalidatesTags: ['Borrow'],
 
   async onQueryStarted({ book, quantity }, { dispatch, queryFulfilled, getState }) {
     const patchBook = dispatch(
