@@ -85,21 +85,19 @@ bookRoutes.post('/', async (req: Request, res: Response, next: NextFunction): Pr
 
 //Get All Books
 bookRoutes.get('/', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  
   try {
     const limit = Number(req.query.limit) || 12;
     const sortBy = req.query.sortBy || "createdAt";
     const sortOrder = req.query.sort === "desc" ? -1 : 1;
     const page = Number(req.query.page) || 1;
 
-
     const apiFeatures = new APIFunctionality(Book.find(), req.query)
       .filter();
 
-
+    // Clone the filtered query BEFORE pagination to get total count
     const filteredQuery = apiFeatures.query.clone();
-    const bookCount = await filteredQuery.countDocuments();
 
+    const bookCount = await filteredQuery.countDocuments();
 
     const totalPages = Math.ceil(bookCount / limit);
 
@@ -111,10 +109,15 @@ bookRoutes.get('/', async (req: Request, res: Response, next: NextFunction): Pro
       return;
     }
 
+    // Apply consistent sorting (including _id to ensure deterministic order)
+    apiFeatures.query = apiFeatures.query.sort({
+      [sortBy as string]: sortOrder,
+      _id: 1,
+    });
 
-    apiFeatures.query = apiFeatures.query.sort({ [sortBy as string]: sortOrder });
-
+    // Then apply pagination
     apiFeatures.pagination(limit);
+
     const books = await apiFeatures.query;
 
     if (!books || books.length === 0) {
@@ -129,12 +132,15 @@ bookRoutes.get('/', async (req: Request, res: Response, next: NextFunction): Pro
       success: true,
       message: "Books retrieved successfully",
       data: books,
+      totalPages,
+      currentPage: page,
     });
 
   } catch (error) {
     next(error);
   }
 });
+
 
 
 // 1. Specific routes first

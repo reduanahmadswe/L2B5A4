@@ -19,6 +19,12 @@ interface BooksResponse {
   data: Book[];
 }
 
+interface BooksResponse {
+  success: boolean;
+  data: Book[];
+  totalPages: number;
+  currentPage: number;
+}
 interface BookResponse {
   success: boolean;
   data: Book;
@@ -43,25 +49,23 @@ export const booksApi = createApi({
   tagTypes: ['Books'],
   endpoints: (builder) => ({
 
-    getBooks: builder.query<Book[], { page?: number; limit?: number; filter?: string }>(
-      {
-        query: ({ page = 1, limit = 10, filter } = {}) => {
-          let queryString = `/api/books?page=${page}&limit=${limit}`;
-          if (filter) {
-            queryString += `&filter=${encodeURIComponent(filter)}`;
-          }
-          return queryString;
-        },
-        transformResponse: (response: BooksResponse) => response.data,
-        providesTags: (result) =>
-          result
-            ? [
-              ...result.map((book) => ({ type: 'Books' as const, id: book._id })),
-              { type: 'Books' },
-            ]
-            : [{ type: 'Books' }],
-      }
-    ),
+    getBooks: builder.query<
+      { books: Book[]; totalPages: number; currentPage: number },
+      { page?: number; limit?: number; filter?: string }
+    >({
+      query: ({ page = 1, limit = 12, filter } = {}) => {
+        let queryString = `/api/books?page=${page}&limit=${limit}`;
+        if (filter) {
+          queryString += `&filter=${encodeURIComponent(filter)}`;
+        }
+        return queryString;
+      },
+      transformResponse: (response: BooksResponse) => ({
+        books: response.data,
+        totalPages: response.totalPages,
+        currentPage: response.currentPage,
+      }),
+    }),
 
 
     getBook: builder.query<Book, string>({
