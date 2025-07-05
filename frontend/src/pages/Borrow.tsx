@@ -91,7 +91,7 @@ const Borrow = () => {
         </div>
       );
 
-      navigate("/borrow-summary");
+      navigate("/books");
     } catch (err: unknown) {
       let errorMessage = "Failed to borrow book";
 

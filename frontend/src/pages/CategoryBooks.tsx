@@ -6,10 +6,11 @@ import { FaSpinner } from "react-icons/fa";
 const CategoryBooks = () => {
   const { genre } = useParams(); 
   const {
-    data: books,
+    data,
     isLoading,
     isError,
   } = useGetBooksQuery({ page: 1, limit: 20, filter: genre });
+    const allBooks = data?.books || [];
 
   return (
     <div className="container mx-auto py-10 px-4 mt-16">
@@ -23,11 +24,11 @@ const CategoryBooks = () => {
         </div>
       ) : isError ? (
         <p className="text-red-500 text-center">Failed to load books.</p>
-      ) : !books || books.length === 0 ? (
+      ) : !allBooks || allBooks.length === 0 ? (
         <p className="text-center text-sky-700">No books found.</p>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {books.map((book) => (
+          {allBooks.map((book) => (
             <div
               key={book._id}
               className="bg-white rounded-lg shadow-sm hover:shadow-md p-4 border border-transparent hover:border-sky-500 transition-all"

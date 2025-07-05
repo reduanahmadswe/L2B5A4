@@ -28,13 +28,10 @@ const limit = 12;
 
 const Books = () => {
   const [page, setPage] = useState(1);
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useGetBooksQuery({ page, limit });
+  const { data, isLoading, isError, error, refetch } = useGetBooksQuery({
+    page,
+    limit,
+  });
 
   const allBooks = data?.books || [];
 
@@ -53,7 +50,8 @@ const Books = () => {
     );
   }
   const navigatePage = (newPage: number) => {
-    if (newPage < 1 || (data && data.books.length < limit && newPage > page)) return;
+    if (newPage < 1 || (data && data.books.length < limit && newPage > page))
+      return;
     setPage(newPage);
   };
 
@@ -88,9 +86,13 @@ const Books = () => {
               />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-sky-900 mb-2">Error Loading Books</h2>
+          <h2 className="text-xl font-bold text-sky-900 mb-2">
+            Error Loading Books
+          </h2>
           <p className="text-sky-800 mb-6">
-            {isErrorWithMessage(error) ? error.data.message : "Something went wrong."}
+            {isErrorWithMessage(error)
+              ? error.data.message
+              : "Something went wrong."}
           </p>
           <button
             onClick={refetch}

@@ -34,7 +34,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
 const Home = () => {
   // Move the hook call here
   const {
-    data: books,
+    data,
     isLoading,
     isError,
   } = useGetBooksQuery({ page: 1, limit: 5 });
@@ -44,6 +44,8 @@ const Home = () => {
     isLoading: categoriesLoading,
     isError: categoriesError,
   } = useGetCategoryCountsQuery();
+
+    const allBooks = data?.books || [];
 
   return (
     <div className="bg-sky-50">
@@ -154,14 +156,14 @@ const Home = () => {
             <div className="flex justify-center items-center py-12">
               <FaSpinner className="animate-spin text-sky-600 text-4xl" />
             </div>
-          ) : isError || !books?.length ? (
+          ) : isError || !allBooks?.length ? (
             <div className="text-center text-sky-700">
               Failed to load featured books. Try again later.
             </div>
           ) : (
             <>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                {books.map((book) => (
+                {allBooks.map((book) => (
                   <div
                     key={book._id}
                     className="bg-sky-50  rounded-xl shadow-sm hover:shadow-lg  hover:shadow-cyan-800 hover:scale-105 hover:bg-sky-200 transition-all duration-300 ease-in-out border border-transparent hover:border-sky-500"
@@ -205,7 +207,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Book Categories Section */}
+
       {/* Featured Book Categories Section */}
       <section className="py-16 bg-sky-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
