@@ -2,7 +2,6 @@
 
 A full-stack library management application with a React.js frontend and Express.js/TypeScript backend, featuring book catalog management and borrowing functionality.
 
-![LibroVault Screenshot](https://librovalt.vercel.app/)
 
 ## 🌟 Features
 
@@ -200,94 +199,20 @@ Backend API: [https://library-management-ten-beta.vercel.app/](https://library-m
 
 ---
 
+### Frontend 📄 Page Routes
+
 ## 🧪 Sample Request: Create Book
 
-**POST** `/api/books`
+| **Route**             | **Description**                                                |
+|-----------------------|----------------------------------------------------------------|
+| `/books`              | Displays a list of all books with options to view, edit, delete, and borrow |
+| `/create-book`        | Form interface to add a new book to the system                |
+| `/books/:id`          | Detailed view of a single book’s information                  |
+| `/edit-book/:id`      | Interface to update an existing book’s details                |
+| `/borrow/:bookId`     | Form to borrow a selected book                                |
+| `/borrow-summary`     | Aggregated summary of all borrowed books                      |
 
-```json
-{
-  "title": "The Theory of Everything",
-  "author": "Stephen Hawking",
-  "genre": "SCIENCE",
-  "isbn": "9780553380163",
-  "description": "An overview of cosmology and black holes.",
-  "copies": 5,
-  "available": true
-}
-```
 
----
-
-## 📊 Borrow Summary (Aggregation)
-
-**GET** `/api/borrow`
-
-**Response:**
-
-```json
-{
-    "success": true,
-    "message": "Borrowed books summary retrieved successfully",
-    "data": [
-        {
-            "book": {
-                "title": "The Selfish Gene",
-                "isbn": "9780192860927"
-            },
-            "totalQuantity": 1
-        },
-        {
-            "book": {
-                "title": "The Mystery of the Universe",
-                "isbn": "9789848001234"
-            },
-            "totalQuantity": 30
-        },
-        {
-            "book": {
-                "title": "Educated",
-                "isbn": "9780399590504"
-            },
-            "totalQuantity": 1
-        },
-        {
-            "book": {
-                "title": "Thinking, Fast and Slow",
-                "isbn": "9780374533557"
-            },
-            "totalQuantity": 1
-        }
-    ]
-}
-```
-
----
-
-## ⚠️ Error Response Structure
-
-```json
-{
-    "message": "Validation failed",
-    "success": false,
-    "error": {
-        "name": "ValidationError",
-        "errors": {
-            "quantity": {
-                "message": "Path `quantity` (-10) is less than minimum allowed value (1).",
-                "name": "ValidatorError",
-                "properties": {
-                    "message": "Path `quantity` (-10) is less than minimum allowed value (1).",
-                    "type": "min",
-                    "min": 1
-                },
-                "kind": "min",
-                "path": "quantity",
-                "value": -10
-            }
-        }
-    }
-}
-```
 
 ---
 ## 📸 Screenshots
@@ -322,4 +247,3 @@ Overview of borrowed books
 
 **Reduan Ahmad**  
 [GitHub](https://github.com/reduanahmadswe/)  
-[Portfolio](https://reduanahmad.com)
