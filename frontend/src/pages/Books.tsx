@@ -222,9 +222,9 @@ const Books = () => {
         </span>
         <button
           onClick={() => navigatePage(page + 1)}
-          disabled={(data?.books.length ?? 0) < limit}
+          disabled={page >= (data?.totalPages ?? Infinity)}
           className={`flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg transition-colors w-full sm:w-auto justify-center ${
-            (data?.books.length ?? 0) < limit
+            page >= (data?.totalPages ?? Infinity)
               ? "bg-gray-200 text-gray-500 cursor-not-allowed"
               : "bg-sky-600 text-white hover:bg-sky-700 hover:shadow-md transform hover:-translate-y-0.5"
           }`}
