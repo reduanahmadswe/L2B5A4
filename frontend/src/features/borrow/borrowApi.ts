@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { booksApi } from '../books/booksApi'; // ✅ Import booksApi to update cache
+import { booksApi } from '../books/booksApi'; 
 
 interface BorrowSummaryItem {
   book: { title: string; isbn: string };
@@ -18,7 +18,7 @@ export const borrowApi = createApi({
   }),
   tagTypes: ['Borrow', 'Books'],
   endpoints: (builder) => ({
-    // ✅ Borrow Book Mutation
+    
     borrowBook: builder.mutation<
       void,
       { book: string; quantity: number; dueDate: string }
@@ -71,7 +71,7 @@ export const borrowApi = createApi({
       },
     }),
 
-    // ✅ Get Borrow Summary Query
+   
     getBorrowSummary: builder.query<BorrowSummaryItem[], void>({
       query: () => '/api/borrow',
       transformResponse: (response: BorrowSummaryResponse) => response.data,

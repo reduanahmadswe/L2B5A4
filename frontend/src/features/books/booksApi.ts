@@ -42,18 +42,6 @@ export const booksApi = createApi({
   }),
   tagTypes: ['Books'],
   endpoints: (builder) => ({
-    // getBooks: builder.query<Book[], { page?: number; limit?: number }>({
-    //   query: ({ page = 1, limit = 10 } = {}) =>
-    //     `/api/books?page=${page}&limit=${limit}`,
-    //   transformResponse: (response: BooksResponse) => response.data,
-    //   providesTags: (result) =>
-    //     result
-    //       ? [
-    //         ...result.map((book) => ({ type: 'Books' as const, id: book._id })),
-    //         { type: 'Books' },
-    //       ]
-    //       : [{ type: 'Books' }],
-    // }),
 
     getBooks: builder.query<Book[], { page?: number; limit?: number; filter?: string }>(
       {
