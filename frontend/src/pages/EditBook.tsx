@@ -1,16 +1,24 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useGetBookQuery, useUpdateBookMutation } from "../features/books/booksApi";
+import {
+  useGetBookQuery,
+  useUpdateBookMutation,
+} from "../features/books/booksApi";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { FiSave, FiArrowLeft, FiBook, FiLoader } from "react-icons/fi";
+
+import { booksApi } from "../features/books/booksApi";
+import { useAppDispatch } from "../redux/hooks";
 
 const EditBook = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: book, isLoading, isError } = useGetBookQuery(id!);
   const [updateBook] = useUpdateBookMutation();
-  
+
+  const dispatch = useAppDispatch();
+
   const [form, setForm] = useState({
     title: "",
     author: "",
@@ -34,19 +42,39 @@ const EditBook = () => {
   }, [book]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ 
-      ...prev, 
-      [name]: name === "copies" ? (value === "" ? "" : value) : value 
+    setForm((prev) => ({
+      ...prev,
+      [name]: name === "copies" ? (value === "" ? "" : value) : value,
     }));
   };
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     await updateBook({
+  //       id: id!,
+  //       book: {
+  //         ...form,
+  //         copies: Number(form.copies),
+  //         available: Number(form.copies) > 0,
+  //       },
+  //     }).unwrap();
+  //     toast.success("Book updated successfully");
+  //     navigate("/");
+  //   } catch {
+  //     toast.error("Failed to update book");
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await updateBook({
+      const updated = await updateBook({
         id: id!,
         book: {
           ...form,
@@ -54,39 +82,61 @@ const EditBook = () => {
           available: Number(form.copies) > 0,
         },
       }).unwrap();
+
+      dispatch(
+        booksApi.util.updateQueryData("getBook", id!, (draft) => {
+          Object.assign(draft, updated);
+        })
+      );
+
+      dispatch(
+        booksApi.util.updateQueryData(
+          "getBooks",
+          { page: 1, limit: 12 },
+          (draft) => {
+            const index = draft.books.findIndex((b) => b._id === id);
+            if (index !== -1) {
+              draft.books[index] = { ...draft.books[index], ...updated };
+            }
+          }
+        )
+      );
+
       toast.success("Book updated successfully");
-      navigate("/");
+      navigate("/books");
     } catch {
       toast.error("Failed to update book");
     }
   };
 
-  if (isLoading) return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-sky-50 p-4">
-      <div className="text-center">
-        <FiLoader className="animate-spin text-sky-500 text-4xl mx-auto mb-4" />
-        <p className="text-sky-700">Loading book details...</p>
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-sky-50 p-4">
+        <div className="text-center">
+          <FiLoader className="animate-spin text-sky-500 text-4xl mx-auto mb-4" />
+          <p className="text-sky-700">Loading book details...</p>
+        </div>
       </div>
-    </div>
-  );
+    );
 
-  if (isError) return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-sky-50 p-4">
-      <div className="text-center">
-        <FiBook className="text-sky-500 text-4xl mx-auto mb-4" />
-        <p className="text-red-600 mb-4">Error loading book details</p>
-        <button 
-          onClick={() => navigate("/")}
-          className="text-sky-600 hover:text-sky-800 font-medium"
-        >
-          Back to home
-        </button>
+  if (isError)
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-sky-50 p-4">
+        <div className="text-center">
+          <FiBook className="text-sky-500 text-4xl mx-auto mb-4" />
+          <p className="text-red-600 mb-4">Error loading book details</p>
+          <button
+            onClick={() => navigate("/")}
+            className="text-sky-600 hover:text-sky-800 font-medium"
+          >
+            Back to home
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
 
   return (
-<div className="min-h-screen bg-gradient-to-b from-sky-50 to-sky-100 pt-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-sky-50 to-sky-100 pt-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         {/* Back button */}
         <motion.div
@@ -94,7 +144,7 @@ const EditBook = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <button 
+          <button
             onClick={() => navigate(-1)}
             className="inline-flex items-center text-sky-600 hover:text-sky-800 mb-6 transition-colors mt-10"
           >
@@ -111,7 +161,7 @@ const EditBook = () => {
           className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden border border-sky-200"
         >
           <div className="p-6 sm:p-8">
-            <motion.h1 
+            <motion.h1
               className="text-2xl font-bold text-sky-900 mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -127,7 +177,10 @@ const EditBook = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                <label htmlFor="title" className="block text-sm font-medium text-sky-700 mb-1">
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-sky-700 mb-1"
+                >
                   Title *
                 </label>
                 <input
@@ -146,7 +199,10 @@ const EditBook = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.35 }}
               >
-                <label htmlFor="author" className="block text-sm font-medium text-sky-700 mb-1">
+                <label
+                  htmlFor="author"
+                  className="block text-sm font-medium text-sky-700 mb-1"
+                >
                   Author *
                 </label>
                 <input
@@ -165,7 +221,10 @@ const EditBook = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                <label htmlFor="genre" className="block text-sm font-medium text-sky-700 mb-1">
+                <label
+                  htmlFor="genre"
+                  className="block text-sm font-medium text-sky-700 mb-1"
+                >
                   Genre *
                 </label>
                 <select
@@ -192,7 +251,10 @@ const EditBook = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.45 }}
               >
-                <label htmlFor="isbn" className="block text-sm font-medium text-sky-700 mb-1">
+                <label
+                  htmlFor="isbn"
+                  className="block text-sm font-medium text-sky-700 mb-1"
+                >
                   ISBN *
                 </label>
                 <input
@@ -211,7 +273,10 @@ const EditBook = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                <label htmlFor="description" className="block text-sm font-medium text-sky-700 mb-1">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-sky-700 mb-1"
+                >
                   Description
                 </label>
                 <textarea
@@ -230,7 +295,10 @@ const EditBook = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.55 }}
               >
-                <label htmlFor="copies" className="block text-sm font-medium text-sky-700 mb-1">
+                <label
+                  htmlFor="copies"
+                  className="block text-sm font-medium text-sky-700 mb-1"
+                >
                   Copies Available *
                 </label>
                 <input
@@ -264,8 +332,6 @@ const EditBook = () => {
           </div>
         </motion.div>
       </div>
-
-      
     </div>
   );
 };
