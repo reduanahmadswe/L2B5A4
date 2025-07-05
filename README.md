@@ -107,6 +107,7 @@ frontend/
 ├── tsconfig.json
 └── vercel.json
 
+backend/
 src/
 ├── app/
 │   ├── controllers
@@ -180,6 +181,8 @@ Backend API: [https://library-management-ten-beta.vercel.app/](https://library-m
 
 ## 📮 API Endpoints
 
+### Backend Routes
+
 ### 🔹 Book Routes
 
 | Method | Endpoint         | Description                         |
@@ -201,8 +204,6 @@ Backend API: [https://library-management-ten-beta.vercel.app/](https://library-m
 
 ### Frontend 📄 Page Routes
 
-## 🧪 Sample Request: Create Book
-
 | **Route**             | **Description**                                                |
 |-----------------------|----------------------------------------------------------------|
 | `/books`              | Displays a list of all books with options to view, edit, delete, and borrow |
@@ -221,7 +222,7 @@ Backend API: [https://library-management-ten-beta.vercel.app/](https://library-m
 Featured books and categories  
 ![Home Page](./screenshots/home.png)
 
-### 📚 Books Catalog
+### 📚 Books Library
 Paginated list of all books  
 ![Books Catalog](./screenshots/books-catalog.png)
 
